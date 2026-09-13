@@ -2,5 +2,5 @@ extension for projection;
 
 extend behavior for ProcessedObject
 {
-//  use event objectProcessedTransition;
+  use event zz_objectProcessedTransition;
 }

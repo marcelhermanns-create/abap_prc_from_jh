@@ -264,12 +264,14 @@ CLASS lsc_ProcessedObject IMPLEMENTATION.
       zcl_prc_processing_api=>get_instance( )->execute_asynch_for_proc_obj( lhc_processedobject=>gt_processed_objects ).
     ENDIF.
 
-    TRY. " Raise events for side-effects starting with release 2025
-        DATA lo_event_raiser TYPE REF TO zif_prc_processed_object_event.
-        CREATE OBJECT lo_event_raiser TYPE ('ZCL_PRC_PROCESSED_OBJECT_EVENT ').
-        lo_event_raiser->raise_processed_object( VALUE #( FOR k IN update-processedobject
-                                                          ( k-uuid ) ) ).
-      CATCH cx_sy_create_object_error.
+    TRY.
+        DATA lt_processed_object_uuid TYPE STANDARD TABLE OF zr_prc_processedobject-uuid WITH DEFAULT KEY.
+        lt_processed_object_uuid = VALUE #( FOR k IN update-processedobject
+                                            ( k-uuid ) ).
+        CALL METHOD ('ZBP_R_PRC_PROCESSEDOBJECTEXT')=>raise_processed_object
+          EXPORTING it_processed_object_uuid = lt_processed_object_uuid.
+      CATCH cx_sy_dyn_call_illegal_class
+            cx_sy_dyn_call_illegal_method.
         " nothing to do, the event raiser class is not available in this installation
     ENDTRY.
   ENDMETHOD.

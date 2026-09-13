@@ -81,16 +81,24 @@ CLASS lsc_saver IMPLEMENTATION.
     CLEAR zbp_prc_run=>gt_apj_parameters.
 
     IF update-run IS NOT INITIAL OR lhc_run=>gt_trigger_se_events_for IS NOT INITIAL.
-      TRY. " Raise events for side-effects starting with release 2025
-          DATA lo_event_raiser TYPE REF TO zif_prc_run_event.
-          CREATE OBJECT lo_event_raiser TYPE ('ZCL_PRC_RUN_EVENT').
-          lo_event_raiser->raise_run( VALUE #( FOR k IN update-run ( k-uuid ) ) ).
-          lo_event_raiser->raise_run( VALUE #( FOR uuid IN lhc_run=>gt_trigger_se_events_for ( uuid ) ) ).
-        CATCH cx_sy_create_object_error.
+      TRY.
+          DATA lt_run_uuid  TYPE STANDARD TABLE OF zr_prc_run-uuid.
+          DATA lt_run_uuid2 TYPE STANDARD TABLE OF zr_prc_run-uuid.
+
+          lt_run_uuid = VALUE #( FOR k IN update-run
+                                 ( k-uuid ) ).
+          lt_run_uuid2 = VALUE #( FOR uuid IN lhc_run=>gt_trigger_se_events_for
+                                  ( uuid ) ).
+          APPEND LINES OF lt_run_uuid2 TO lt_run_uuid.
+
+          CALL METHOD ('ZBP_R_PRC_RUNEXT')=>('RAISE_RUN')
+            EXPORTING it_run_uuid = lt_run_uuid.
+
+        CATCH cx_sy_dyn_call_illegal_class
+              cx_sy_dyn_call_illegal_method.
           " nothing to do, the event raiser class is not available in this installation
       ENDTRY.
     ENDIF.
-
   ENDMETHOD.
 
   METHOD cleanup_finalize.
