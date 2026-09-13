@@ -5,6 +5,21 @@
    <MASTER_LANGUAGE>E</MASTER_LANGUAGE>
    <STARTING_FOLDER>/src/</STARTING_FOLDER>
    <FOLDER_LOGIC>FULL</FOLDER_LOGIC>
+   <IGNORE>
+    <item>/src/zabap_prc_events_se_2025/package.devc.xml</item>
+    <item>/src/zabap_prc_events_se_2025/zbp_r_prc_processedobjectext.clas.abap</item>
+    <item>/src/zabap_prc_events_se_2025/zbp_r_prc_processedobjectext.clas.xml</item>
+    <item>/src/zabap_prc_events_se_2025/zbp_r_prc_runext.clas.abap</item>
+    <item>/src/zabap_prc_events_se_2025/zbp_r_prc_runext.clas.xml</item>
+    <item>/src/zabap_prc_events_se_2025/zc_prc_processedobjectext.bdef.asbdef</item>
+    <item>/src/zabap_prc_events_se_2025/zc_prc_processedobjectext.bdef.xml</item>
+    <item>/src/zabap_prc_events_se_2025/zc_prc_runext.bdef.asbdef</item>
+    <item>/src/zabap_prc_events_se_2025/zc_prc_runext.bdef.xml</item>
+    <item>/src/zabap_prc_events_se_2025/zr_prc_processedobjectext.bdef.asbdef</item>
+    <item>/src/zabap_prc_events_se_2025/zr_prc_processedobjectext.bdef.xml</item>
+    <item>/src/zabap_prc_events_se_2025/zr_prc_runext.bdef.asbdef</item>
+    <item>/src/zabap_prc_events_se_2025/zr_prc_runext.bdef.xml</item>
+   </IGNORE>
   </DATA>
  </asx:values>
 </asx:abap>
