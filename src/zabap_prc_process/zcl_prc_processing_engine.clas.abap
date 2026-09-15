@@ -19,6 +19,8 @@ CLASS zcl_prc_processing_engine DEFINITION
 
     TYPES: BEGIN OF ty_selected_state,
              uuid                        TYPE ZR_PRC_ProcessedObject-uuid,
+             ExternalProcessedObjectID   TYPE ZR_PRC_ProcessedObject-ExternalProcessedObjectID,
+             ExternalProcessedObjectUUID TYPE ZR_PRC_ProcessedObject-ExternalProcessedObjectUUID,
              runUUID                     TYPE ZR_PRC_ProcessedObject-RunUUID,
              ProcessName                 TYPE ZR_PRC_ProcessedObject-ProcessName,
              FactoryClassName            TYPE ZR_PRC_ProcessedObject-FactoryClassName,
@@ -26,8 +28,6 @@ CLASS zcl_prc_processing_engine DEFINITION
              state                       TYPE ZR_PRC_ProcessedObject-state,
              queueID                     TYPE ZR_PRC_ProcessedObject-QueueID,
              queuePosition               TYPE ZR_PRC_ProcessedObject-QueuePosition,
-             ExternalProcessedObjectID   TYPE ZR_PRC_ProcessedObject-ExternalProcessedObjectID,
-             ExternalProcessedObjectUUID TYPE ZR_PRC_ProcessedObject-ExternalProcessedObjectUUID,
              RetryCount                  TYPE ZR_PRC_ProcessedObject-RetryCount,
              RetryDateTime               TYPE ZR_PRC_ProcessedObject-RetryDateTime,
              MessageSeverity             TYPE ZR_PRC_ProcessedStep-MessageSeverity,
@@ -236,6 +236,8 @@ CLASS zcl_prc_processing_engine IMPLEMENTATION.
 
     SELECT FROM ZR_PRC_ProcessedObject AS ProcessedObject
       FIELDS uuid,
+             ExternalProcessedObjectID,
+             ExternalProcessedObjectUUID,
              runUUID,
              ProcessName,
              FactoryClassName,
@@ -243,8 +245,6 @@ CLASS zcl_prc_processing_engine IMPLEMENTATION.
              state,
              QueueID,
              QueuePosition,
-             ExternalProcessedObjectID,
-             ExternalProcessedObjectUUID,
              RetryCount,
              RetryDateTime,
              \_LatestStep-MessageSeverity,

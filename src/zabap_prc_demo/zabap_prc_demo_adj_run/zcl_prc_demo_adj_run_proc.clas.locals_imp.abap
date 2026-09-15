@@ -25,19 +25,19 @@ CLASS lcl_adjust IMPLEMENTATION.
   METHOD perform_transition.
     WAIT UP TO 1 SECONDS.
     IF sy-uzeit MOD 10 = 3.
-      MESSAGE e004(zr1_adjustment_run) WITH i_processed_object_ext_id INTO DATA(lv_dummy) ##NEEDED.
+      MESSAGE e004(zprc_demo_adjust_run) WITH i_processed_object_ext_id INTO DATA(lv_dummy) ##NEEDED.
       get_message_handler( )->add_message_from_sy( ).
     ELSEIF sy-uzeit MOD 10 = 5.
-      MESSAGE e005(zr1_adjustment_run) WITH i_processed_object_ext_id INTO lv_dummy.
+      MESSAGE e005(zprc_demo_adjust_run) WITH i_processed_object_ext_id INTO lv_dummy.
       get_message_handler( )->add_message_from_sy( ).
     ELSE.
       DO 10 TIMES.
         IF sy-uzeit MOD 10 = 3.
-          MESSAGE e003(zr1_adjustment_run) INTO lv_dummy.
+          MESSAGE e003(zprc_demo_adjust_run) INTO lv_dummy.
           get_message_handler( )->add_message_from_sy( i_fail_on_error_message = abap_false ).
         ELSE.
           DATA(lv_item_pos) = sy-index * 10.
-          MESSAGE s002(zr1_adjustment_run) WITH i_processed_object_ext_id lv_item_pos INTO lv_dummy.
+          MESSAGE s002(zprc_demo_adjust_run) WITH i_processed_object_ext_id lv_item_pos INTO lv_dummy.
           get_message_handler( )->add_message_from_sy( ).
         ENDIF.
       ENDDO.

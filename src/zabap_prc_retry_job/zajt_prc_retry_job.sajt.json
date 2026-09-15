@@ -7,23 +7,5 @@
   },
   "generalInformation": {
     "catalogName": "ZAJC_PRC_RETRY_JOB"
-  },
-  "parameters": {
-    "singleValueParameters": [
-      {
-        "name": "P_IGNR",
-        "value": ""
-      }
-    ],
-    "valueRangesParameters": [
-      {
-        "name": "S_PROC",
-        "valueRanges": []
-      },
-      {
-        "name": "S_UUID",
-        "valueRanges": []
-      }
-    ]
   }
 }

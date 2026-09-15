@@ -24,9 +24,9 @@ CLASS lhc_ServiceContract IMPLEMENTATION.
             ( name = zcl_prc_demo_adjust_run_job=>c_parameter-equipment_category    value = keys[ 1 ]-%param-EquipmentCategory )
             ( name = zcl_prc_demo_adjust_run_job=>c_parameter-discount_percent      value = keys[ 1 ]-%param-DiscountInPercent )
             ( name = zcl_prc_demo_adjust_run_job=>c_parameter-material              value = keys[ 1 ]-%param-Material ) )
-        iv_application_name      = zif_prc_run=>co_application_names-srv_ctr_credit_note
-        iv_job_name              = |Credit Note Run - { sy-datum }, { sy-uzeit } - { sy-uname }|
-        iv_job_template_name     = zif_prc_run=>co_job_template_names-srv_ctr_credit_note ).
+        iv_application_name      = zif_prc_run=>co_application_names-demo_rate_adjustment
+        iv_job_name              = |Service Contract Adjustment Run - { sy-datum }, { sy-uzeit } - { sy-uname }|
+        iv_job_template_name     = zif_prc_run=>co_job_template_names-demo_rate_adjustment ).
 
     APPEND VALUE #( %cid           = keys[ 1 ]-%cid
                     %param-runUUID = lv_run_uuid ) TO result.

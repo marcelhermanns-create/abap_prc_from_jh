@@ -18,6 +18,9 @@ CLASS zcl_prc_demo_adjust_run_job DEFINITION
                  discount_percent   TYPE zif_prc_run=>ty_run_parameter VALUE 'P_DISC',
                END OF c_parameter.
 
+    CONSTANTS: co_job_template_names TYPE zif_prc_run=>ty_job_template_name VALUE 'ZAJT_PRC_DEMO_ADJUST_RUN'.
+    CONSTANTS: co_application_names  TYPE zprc_run_app_name VALUE 'DEMO_RATE_ADJUSTMENT'.
+
   PROTECTED SECTION.
     METHODS get_application_name REDEFINITION.
     METHODS execute              REDEFINITION.
@@ -89,7 +92,7 @@ CLASS zcl_prc_demo_adjust_run_job IMPLEMENTATION.
                                                 factoryClassName    = zcl_prc_demo_create_equi_proc=>co_class_name
                                                 processName         = zcl_prc_demo_create_equi_proc=>co_process_name ) )
         i_perform_commit           = abap_true
-        i_trigger_processing       = zcl_prc_processing_api=>execution_mode-appl_job_execution ).
+        i_trigger_processing       = zcl_prc_processing_api=>execution_mode-direct_execution ).
   ENDMETHOD.
 
   METHOD _get_data.

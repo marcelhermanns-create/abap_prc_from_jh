@@ -106,17 +106,17 @@ CLASS zcl_prc_processing_api IMPLEMENTATION.
     CHECK i_create_processed_objects IS NOT INITIAL.
 
     DATA(lt_proc_obj) = VALUE tt_proc_obj( FOR k IN i_create_processed_objects
-                                           ( do_not_process_before = k-doNotProcessBefore
-                                             factory_class_name    = k-factoryClassName
-                                             mail_address          = k-mailAddress
-                                             payload_json          = k-payloadJson
-                                             process_name          = k-processName
-                                             processed_object      = k-processedObject
-                                             processed_object_uuid = k-processedObjectUUID
-                                             queue_id              = k-queueID
-                                             queue_pos             = k-queuePosition
-                                             run_uuid              = k-runUUID
-                                             State                 = zif_prc_process=>co_start ) ).
+                                           ( do_not_process_before     = k-doNotProcessBefore
+                                             factory_class_name        = k-factoryClassName
+                                             mail_address              = k-mailAddress
+                                             payload_json              = k-payloadJson
+                                             process_name              = k-processName
+                                             ext_processed_object_id   = k-processedObject
+                                             ext_processed_object_uuid = k-processedObjectUUID
+                                             queue_id                  = k-queueID
+                                             queue_pos                 = k-queuePosition
+                                             run_uuid                  = k-runUUID
+                                             State                     = zif_prc_process=>co_start ) ).
 
     LOOP AT lt_proc_obj ASSIGNING FIELD-SYMBOL(<fs>).
       TRY.
@@ -153,7 +153,7 @@ CLASS zcl_prc_processing_api IMPLEMENTATION.
         ENDTRY.
 
       WHEN execution_mode-appl_job_execution.
-
+        ASSERT 1 = 2.
         DATA lt_job_parameter TYPE cl_apj_rt_api=>tt_job_parameter_value.
 
         LOOP AT lt_processing_parameters INTO FINAL(ls_parameter).
