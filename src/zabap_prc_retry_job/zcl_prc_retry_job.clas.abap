@@ -7,6 +7,9 @@ CLASS zcl_prc_retry_job DEFINITION
     INTERFACES if_apj_dt_exec_object.
 *    interfaces if_apj_jt_check_20.
 
+
+    CONSTANTS c_apj_template_name TYPE cl_apj_rt_api=>ty_template_name VALUE 'ZAJT_PRC_RETRY_JOB'.
+
     CONSTANTS c_process_name   TYPE zif_prc_run=>ty_run_parameter VALUE 'S_PROC'.
     CONSTANTS p_ignore_restart TYPE zif_prc_run=>ty_run_parameter VALUE 'P_IGNR'.
     CONSTANTS s_uuid           TYPE zif_prc_run=>ty_run_parameter VALUE 'S_UUID'.

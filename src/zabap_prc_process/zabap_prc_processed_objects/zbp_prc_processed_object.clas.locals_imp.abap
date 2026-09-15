@@ -61,9 +61,7 @@ ENDCLASS.
 
 CLASS lhc_ProcessedObject DEFINITION INHERITING FROM cl_abap_behavior_handler.
   PUBLIC SECTION.
-    CLASS-DATA gv_start_processing_requests TYPE abap_bool.
     CLASS-DATA gt_processed_objects         TYPE STANDARD TABLE OF ZR_PRC_ProcessedObject-uuid WITH DEFAULT KEY.
-    CLASS-DATA gv_init_demo_data            TYPE abap_bool.
 
   PRIVATE SECTION.
     METHODS get_instance_authorizations FOR INSTANCE AUTHORIZATION IMPORTING keys REQUEST requested_authorizations FOR ProcessedObject RESULT result.
@@ -149,7 +147,6 @@ CLASS lhc_ProcessedObject IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD resumeProcessing.
-    gv_start_processing_requests = abap_true.
     gt_processed_objects = VALUE #( FOR k IN keys
                                     ( k-uuid ) ).
 
@@ -260,7 +257,7 @@ ENDCLASS.
 
 CLASS lsc_ProcessedObject IMPLEMENTATION.
   METHOD save_modified.
-    IF lhc_ProcessedObject=>gv_start_processing_requests = ABAP_true.
+    IF lhc_processedobject=>gt_processed_objects IS NOT INITIAL.
       zcl_prc_processing_api=>get_instance( )->execute_asynch_for_proc_obj( lhc_processedobject=>gt_processed_objects ).
     ENDIF.
 
@@ -269,7 +266,8 @@ CLASS lsc_ProcessedObject IMPLEMENTATION.
         lt_processed_object_uuid = VALUE #( FOR k IN update-processedobject
                                             ( k-uuid ) ).
         CALL METHOD ('ZBP_R_PRC_PROCESSEDOBJECTEXT')=>raise_processed_object
-          EXPORTING it_processed_object_uuid = lt_processed_object_uuid.
+          EXPORTING
+            it_processed_object_uuid = lt_processed_object_uuid.
       CATCH cx_sy_dyn_call_illegal_class
             cx_sy_dyn_call_illegal_method.
         " nothing to do, the event raiser class is not available in this installation

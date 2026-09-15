@@ -33,15 +33,13 @@ CLASS zcl_prc_demo_create_equi_init IMPLEMENTATION.
            DELETE FROM VALUE #( FOR k IN lt_existing
                                 ( %key-uuid = k-uuid ) ).
 
-    zcl_prc_processing_api=>get_instance(
-        )->add_processed_objects_and_exec(
-            VALUE #( FOR i = 1 UNTIL i > 20
-                     ( %param-processName      = zcl_prc_demo_create_equi_proc=>co_process_name
-                       %param-mailAddress      = 'demo@brandeis.de'
-                       %param-payloadJson      = '{Json: true}'
-                       %param-FactoryClassName = zcl_prc_demo_create_equi_proc=>co_class_name
-                       %cid                    = |DEMO_{ i ALIGN = RIGHT PAD = '0' WIDTH = 3 }|
-                       %param-processedObject  = |EQUI{ i ALIGN = RIGHT PAD = '0' WIDTH = 3 }| ) ) ).
+    zcl_prc_processing_api=>get_instance( )->create_processed_objects(
+        i_create_processed_objects = VALUE #( FOR i = 1 UNTIL i > 20
+                                              ( processName      = zcl_prc_demo_create_equi_proc=>co_process_name
+                                                FactoryClassName = zcl_prc_demo_create_equi_proc=>co_class_name
+                                                processedObject  = |EQUI{ i ALIGN = RIGHT PAD = '0' WIDTH = 3 }| ) )
+        i_perform_commit           = abap_true
+        i_trigger_processing       = zcl_prc_processing_api=>execution_mode-direct_execution ).
   ENDMETHOD.
 
 

@@ -81,14 +81,15 @@ CLASS zcl_prc_demo_adjust_run_job IMPLEMENTATION.
 
     set_total_number( lines( lt_contract_ids ) ).
 
-    zcl_prc_processing_api=>get_instance( )->add_processed_objects_and_exec(
-      EXPORTING i_processed_objects_to_create = VALUE #(
-          FOR k IN lt_contract_ids
-          ( %param = VALUE #( processedObject     = k-id
-                              processedObjectUUID = k-uuid
-                              runUUID             = me->mv_current_run_uuid
-                              factoryClassName    = zcl_prc_demo_create_equi_proc=>co_class_name
-                              processName         = zcl_prc_demo_create_equi_proc=>co_process_name ) ) ) ).
+    zcl_prc_processing_api=>get_instance( )->create_processed_objects(
+        i_create_processed_objects = VALUE #( FOR i IN lt_contract_ids
+                                              ( processedObject     = i-id
+                                                processedObjectUUID = i-uuid
+                                                runUUID             = mv_current_run_uuid
+                                                factoryClassName    = zcl_prc_demo_create_equi_proc=>co_class_name
+                                                processName         = zcl_prc_demo_create_equi_proc=>co_process_name ) )
+        i_perform_commit           = abap_true
+        i_trigger_processing       = zcl_prc_processing_api=>execution_mode-appl_job_execution ).
   ENDMETHOD.
 
   METHOD _get_data.
