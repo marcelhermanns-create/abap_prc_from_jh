@@ -16,12 +16,7 @@ CLASS zcl_prc_message_handler DEFINITION PUBLIC FINAL CREATE PRIVATE.
     DATA ms_header            TYPE zif_prc_message_handler=>ty_message_details.
     DATA mt_messages          TYPE zif_prc_message_handler=>tt_messages.
     DATA mv_failed            TYPE abap_bool.
-    DATA mv_closed            TYPE abap_bool.
     DATA mv_already_simulated TYPE abap_bool.
-
-
-    "! Guards every mutating method against use after sealing.
-    METHODS assert_open.
 
     "! Marks the unit of work as failed, seals the handler and raises.
     "!
@@ -76,13 +71,6 @@ CLASS zcl_prc_message_handler IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD assert_open.
-    IF mv_closed = abap_true.
-      RAISE EXCEPTION NEW zcx_prc_message_handler_misuse( textid = zcx_prc_message_handler_misuse=>already_closed ).
-    ENDIF.
-  ENDMETHOD.
-
-
   METHOD constructor.
     m_bali_log = i_bali_log.
   ENDMETHOD.
@@ -95,7 +83,6 @@ CLASS zcl_prc_message_handler IMPLEMENTATION.
 
   METHOD fail.
     mv_failed = abap_true.
-    mv_closed = abap_true.
     RAISE EXCEPTION NEW zcx_prc_unit_of_work_failed( ).
   ENDMETHOD.
 
@@ -128,7 +115,6 @@ CLASS zcl_prc_message_handler IMPLEMENTATION.
 
   METHOD zif_prc_message_handler~add_bapi_result.
     r_message_handler = me.
-    assert_open( ).
 
     DATA(lt_msg) = zcl_prc_message_mapper=>from_bapiret( i_bapiret ).
     append_messages( lt_msg ).
@@ -141,7 +127,6 @@ CLASS zcl_prc_message_handler IMPLEMENTATION.
 
   METHOD zif_prc_message_handler~add_EML_modify_result.
     r_message_handler = me.
-    assert_open( ).
 
     IF i_reported IS SUPPLIED.
       DATA(lt_msg) = zcl_prc_message_mapper=>from_reported( i_reported ).
@@ -159,7 +144,6 @@ CLASS zcl_prc_message_handler IMPLEMENTATION.
 
   METHOD zif_prc_message_handler~add_message_from_sy.
     r_message_handler = me.
-    assert_open( ).
 
     DATA(ls_msg) = CORRESPONDING symsg( sy ).
     append_message( ls_msg ).
@@ -171,7 +155,6 @@ CLASS zcl_prc_message_handler IMPLEMENTATION.
 
   METHOD zif_prc_message_handler~add_message_from_text.
     r_message_handler = me.
-    assert_open( ).
 
     DATA(ls_msg) = zcl_prc_message_mapper=>from_text( text  = i_message_text
                                                       msgty = i_message_severity ).
@@ -184,27 +167,10 @@ CLASS zcl_prc_message_handler IMPLEMENTATION.
 
 
   METHOD zif_prc_message_handler~close_failed.
-    assert_open( ).
 
     set_message_header( CORRESPONDING #( sy ) ).
     fail( ).
   ENDMETHOD.
-
-
-  METHOD zif_prc_message_handler~close_ok.
-    assert_open( ).
-    IF mv_failed = abap_true.
-      RAISE EXCEPTION NEW zcx_prc_message_handler_misuse( textid = zcx_prc_message_handler_misuse=>success_despite_errors ).
-    ENDIF.
-
-    IF i_header IS INITIAL.
-      RAISE EXCEPTION NEW zcx_prc_message_handler_misuse( textid = zcx_prc_message_handler_misuse=>header_missing ).
-    ENDIF.
-    zif_prc_message_handler~set_success_header( i_header ).
-
-    mv_closed = abap_true.
-  ENDMETHOD.
-
 
   METHOD zif_prc_message_handler~finalize_and_persist_log.
     LOOP AT mt_messages INTO DATA(ls_message).
@@ -231,16 +197,8 @@ CLASS zcl_prc_message_handler IMPLEMENTATION.
     r_has_errors = mv_failed.
   ENDMETHOD.
 
-
-  METHOD zif_prc_message_handler~is_closed.
-    r_is_closed = mv_closed.
-  ENDMETHOD.
-
-
   METHOD zif_prc_message_handler~set_failure_header.
     r_message_handler = me.
-    assert_open( ).
-
     set_message_header( i_header_message ).
   ENDMETHOD.
 
@@ -257,7 +215,6 @@ CLASS zcl_prc_message_handler IMPLEMENTATION.
 
   METHOD zif_prc_message_handler~simulate_save.
     r_message_handler = me.
-    assert_open( ).
 
     IF mv_already_simulated = abap_true.
       RAISE EXCEPTION NEW zcx_prc_message_handler_misuse( textid = zcx_prc_message_handler_misuse=>already_simulated ).

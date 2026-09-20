@@ -125,7 +125,6 @@ CLASS zcl_prc_processing_api IMPLEMENTATION.
           ASSERT lx IS NOT BOUND.
       ENDTRY.
     ENDLOOP.
-
     INSERT zprc_proc_object FROM TABLE lt_proc_obj.
 
     IF i_perform_commit = abap_true.
@@ -153,7 +152,6 @@ CLASS zcl_prc_processing_api IMPLEMENTATION.
         ENDTRY.
 
       WHEN execution_mode-appl_job_execution.
-        ASSERT 1 = 2.
         DATA lt_job_parameter TYPE cl_apj_rt_api=>tt_job_parameter_value.
 
         LOOP AT lt_processing_parameters INTO FINAL(ls_parameter).

@@ -154,13 +154,13 @@ INTERFACE zif_prc_message_handler PUBLIC.
   METHODS simulate_save RETURNING VALUE(r_message_handler) TYPE REF TO zif_prc_message_handler
                         RAISING   zcx_prc_unit_of_work_failed.
 
-  "! Closes the handler successfully and stores the header message."
-  "! Without a parameter, SY is evaluated - call directly after MESSAGE s...
-  "! Raises ZCX_PRC_MESSAGE_HANDLER_MISUSE if errors were collected before,
-  "! since a success message would then contradict the collected content.
-  "!
-  "! @parameter i_header | Success message represented via symsg.
-  METHODS close_ok IMPORTING i_header TYPE symsg.
+*  "! Closes the handler successfully and stores the header message."
+*  "! Without a parameter, SY is evaluated - call directly after MESSAGE s...
+*  "! Raises ZCX_PRC_MESSAGE_HANDLER_MISUSE if errors were collected before,
+*  "! since a success message would then contradict the collected content.
+*  "!
+*  "! @parameter i_header | Success message represented via symsg.
+*  METHODS close_ok IMPORTING i_header TYPE symsg.
 
   "! Closes the handler as failed and stores the header message from SY.
   "!
@@ -179,13 +179,13 @@ INTERFACE zif_prc_message_handler PUBLIC.
   "! @parameter r_has_errors | ABAP_TRUE if an operation failed or CLOSE_FAILED was called.
   METHODS has_errors RETURNING VALUE(r_has_errors) TYPE abap_bool.
 
-  "! Returns whether the handler has been sealed.
-  "!
-  "! Intended for the orchestrating caller: code that returns without a sealed
-  "! handler has violated the contract.
-  "!
-  "! @parameter r_is_closed | ABAP_TRUE after CLOSE_OK, CLOSE_FAILED or any failure.
-  METHODS is_closed RETURNING VALUE(r_is_closed) TYPE abap_bool.
+*  "! Returns whether the handler has been sealed.
+*  "!
+*  "! Intended for the orchestrating caller: code that returns without a sealed
+*  "! handler has violated the contract.
+*  "!
+*  "! @parameter r_is_closed | ABAP_TRUE after CLOSE_OK, CLOSE_FAILED or any failure.
+*  METHODS is_closed RETURNING VALUE(r_is_closed) TYPE abap_bool.
 
   "! Returns the header message to be persisted on header level.
   "!

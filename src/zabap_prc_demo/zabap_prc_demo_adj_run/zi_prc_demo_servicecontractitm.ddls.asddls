@@ -1,11 +1,15 @@
 @AccessControl.authorizationCheck: #NOT_REQUIRED
+
 @EndUserText.label: 'Service Contract'
+
 @Metadata.allowExtensions: true
 
 define root view entity ZI_PRC_DEMO_ServiceContractItm
   as select from zprc_demo_sc_itm as ServiceContractItem
-  association [0..1] to ZC_PRC_DEMO_Material               as _Material        on $projection.ProductId = _Material.Identifier
-  association [0..1] to ZC_PRC_DEMO_Equipment              as _Equipment       on $projection.EquipmentId = _Equipment.Identifier
+
+  association [0..1] to ZC_PRC_DEMO_Material    as _Material  on $projection.ProductId = _Material.Identifier
+  association [0..1] to ZI_PRC_DEMO_EquipmentVH as _Equipment on $projection.EquipmentId = _Equipment.Identifier
+
 {
   key uuid             as UUID,
 
@@ -14,6 +18,7 @@ define root view entity ZI_PRC_DEMO_ServiceContractItm
 
       @ObjectModel.foreignKey.association: '_Material'
       product_id       as ProductId,
+
       quantity         as Quantity,
       quantity_uom     as QuantityUom,
       currency         as Currency,

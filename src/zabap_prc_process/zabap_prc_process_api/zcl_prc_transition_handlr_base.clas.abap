@@ -114,18 +114,22 @@ CLASS zcl_prc_transition_handlr_base IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD zif_prc_transition_handler~perform_transition.
-    DATA(ls_failure_message) = get_failure_message( ).
-    IF ls_failure_message IS NOT INITIAL.
-      mo_handler->set_failure_header( get_failure_message( ) ).
-    ENDIF.
-    r_new_state = perform_transition( EXPORTING i_start_state               = i_start_state
-                                                i_processed_object_ext_id   = m_processed_object_ext_id
-                                                i_processed_object_ext_uuid = m_processed_object_ext_uuid
-                                      CHANGING  c_payload_json              = c_payload_json ).
-    mo_handler->simulate_save( ).
+    TRY.
+        r_new_state = perform_transition( EXPORTING i_start_state               = i_start_state
+                                                    i_processed_object_ext_id   = m_processed_object_ext_id
+                                                    i_processed_object_ext_uuid = m_processed_object_ext_uuid
+                                          CHANGING  c_payload_json              = c_payload_json ).
+        mo_handler->simulate_save( ).
+      CATCH zcx_prc_unit_of_work_failed INTO DATA(lx_unit_of_work_failed).
+        DATA(ls_failure_message) = get_failure_message( ).
+        IF ls_failure_message IS NOT INITIAL.
+          mo_handler->set_failure_header( ls_failure_message ).
+        ENDIF.
+        RAISE EXCEPTION lx_unit_of_work_failed.
+    ENDTRY.
 
-    mo_handler->close_ok( get_success_message( i_processed_object_ext_id   = m_processed_object_ext_id
-                                               i_processed_object_ext_uuid = m_processed_object_ext_uuid ) ).
+    mo_handler->set_success_header( get_success_message( i_processed_object_ext_id   = m_processed_object_ext_id
+                                                         i_processed_object_ext_uuid = m_processed_object_ext_uuid ) ).
 
     CLEAR mo_handler.
   ENDMETHOD.
